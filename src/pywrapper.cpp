@@ -21,7 +21,7 @@ PyObject* to_pylist(std::vector<int> &ret) {
     int ret_len = ret.size();
     PyObject *pyRetList = PyList_New(ret_len);
     for(int i=0; i<ret_len; i++) {
-        PyObject *pyRetValue = PyInt_FromSsize_t(ret[i]);
+        PyObject *pyRetValue = PyLong_FromSsize_t(ret[i]);
         PyList_SetItem(pyRetList, i, pyRetValue);
     }
     return pyRetList;
@@ -29,7 +29,7 @@ PyObject* to_pylist(std::vector<int> &ret) {
 
 PyObject* to_pytuple(int best_loc, double best_stat) {
     PyObject *pyRetTuple = PyTuple_New(2);
-    PyTuple_SetItem(pyRetTuple, 0, PyInt_FromSsize_t(best_loc));
+    PyTuple_SetItem(pyRetTuple, 0, PyLong_FromSsize_t(best_loc));
     PyTuple_SetItem(pyRetTuple, 1, PyFloat_FromDouble(best_stat));
     return pyRetTuple;
 }
@@ -84,6 +84,20 @@ static PyMethodDef edmMethods[] = {
     {"edm_x",  EDM_x_wrapper, METH_VARARGS, "EDM X"},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
-extern "C" void initedm(void) {
-    (void) Py_InitModule("edm", edmMethods);
+
+static struct PyModuleDef edmModule = {
+    PyModuleDef_HEAD_INIT,
+    "edm",
+    "A Python module that run Twitter's AnomalyDetection and BreakoutDetection.",
+    -1,
+    edmMethods
+};
+
+// extern "C" void initedm(void) {
+    // (void) Py_InitModule3("edm", edmMethods);
+// }
+
+PyMODINIT_FUNC PyInit_edm(void) {
+    Py_Initialize();
+    return PyModule_Create(&edmModule);
 }

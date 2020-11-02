@@ -7,7 +7,6 @@ Checkout the code, enter the folder and run:
 ```
 pip install -r requirements.txt
 ```
-When use this as a library, please include the line for "pyloess" from "requirements.txt" in your "requirements.txt".
 
 ## Usage
 The parameters are the same as the AnomalyDetectionVec in Twitter's AnomalyDetection (except the plot related ones).

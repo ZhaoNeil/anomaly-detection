@@ -52,7 +52,7 @@ def detect_breakout(z, min_size=30, method='amoc', alpha=2, exact=True, sig_leve
     for value in z:
         if np.isnan(value):
             raise ValueError("data contains NaN.")
-    if not z:
+    if len(z) == 0:
         return []
     z_max = max(z)
     z_min = min(z)

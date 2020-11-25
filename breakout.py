@@ -11,25 +11,46 @@ def detect_breakout(z, min_size=30, method='amoc', alpha=2, exact=True, sig_leve
                     degree=1, beta=None, percent=None):
     """
     Breakout Detector: Energy Divisive with Medians
-    A technique for robustly, i.e., in the presence of anomalies, detecting single or multiple change points in
-    univariate time series.
-    :param z: list of floats. The input time series.
-    :param min_size: int. The minimum number of observations between change points.
-    :param method: string. Method must be one of either 'amoc' (At Most One Change) or
-                   'multi' (Multiple Changes). For 'amoc' at most one change point location will be returned.
-    :param alpha: float in (0, 2]. For 'amoc' method. The alpha parameter used to weight the distance
-                  between observations.
-    :param exact: boolean. For 'amoc' method. True to use truemedians, False to use approximate medians
-                           when determining change points.
-    :param sig_level: float in (0, 1). For 'amoc' method. Once a change point is found its statistical significance is
-                      determined through a hypothesis test. This is the significance.
-    :param nperm: int >= 0. For 'amoc' method. The number of permutations to perform in order to obtain an approximate
-                  p-value. If 0 then then permutation test is not performed.
-    :param degree: int, can take the values 0, 1 or 2. For 'multi' method. The degree of the penalization polynomial.
-    :param beta: float. For 'multi' method. Used to further control the amount of penalization.
-    :param percent: float. For 'multi' method. This value specifies the minimum percent change in the goodness of fit
-                    statistic to consider adding an additional change point.
-    :return: list of int, containing the index of change points.
+    A technique for robustly, i.e., in the presence of anomalies, detecting single or multiple change
+    points in univariate time series.
+
+    Z：list of floats. The input time series. This is either a numeric vector or a data.frame which has 'timestamp' 
+    and 'count' components.
+
+    min.size：int. The minimum number of observations between change points.
+
+    method：string. Method must be one of either 'amoc' (At Most One Change) or 'multi' (Multiple Changes).
+    For 'amoc' at most one change point location will be returned.
+
+    For singe change analysis, the following arguments are accepted:
+
+        alpha: float in (0,2]. The alpha parameter used to weight the distance between observations. This is a real 
+        number in the interval (0,2]. The default value is alpha=2.
+
+        exact: boolean. This flag is for selecting the use of true medians (TRUE) or approximate medians 
+        (FALSE) when determining change points. The default value is exact=TRUE.
+
+        sig.lvl: float in (0,1). Once a change point is found its statistical significance is determined through a 
+        hypothesis test. sig.lvl specifies the significance for the hypothesis test. The default 
+        value is sig.lvl=0.05.
+
+        nperm: int >= 0. The number of permutations to perform in order to obtain an approximate p-value. If 
+        nperm=0 then then permutation test is not performed. The default value is nperm=0.
+
+    For multiple change analysis, the following arguments are accepted:
+        degree: int, can take the values 0, 1 or 2. The degree of the penalization polynomial. degree can take the values 0, 1, and 2. 
+        The default value is degree=1.
+
+        beta: float. A real numbered constant used to further control the amount of penalization. This is 
+        the default form of penalization, if neither (or both) beta or (and) percent are supplied 
+        this argument will be used. The default value is beta=0.008.
+
+        percent: float. A real numbered constant used to further control the amount of penalization. This 
+        value specifies the minimum percent change in the goodness of fit statistic to consider 
+        adding an additional change point. A value of 0.25 corresponds to a 25% increase. percent 
+        doesn't have a default value. 
+
+    return: list of int, containing the index of change points.
     """
     if not isinstance(min_size, int) or min_size < 2:
         raise ValueError("min_size must be an int >= 2.")
